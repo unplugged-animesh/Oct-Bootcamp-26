@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Create Category</title>
+</head>
+<body>
+	<div class="box">
+		<div class="back">
+			<a href="{{url_for('admin_dashboard',curr_login_id=curr_login_id)}}" class="back">Dashboard</a>
+		<div>
+		<h1> Create Category</h1>
+		<form method="POST" action="{{url_for('create_category',curr_login_id=curr_login_id)}}">
+			<div>
+				<label for ="name"> Category name:</label>
+				<input type="text" id="name" name="name" required>
+			</div>	
+			<div>
+				<input type="submit" value="Create Category">
+			</div>
+</body>
+</html>
