@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Edit Product</title>
+</head>
+<body>
+	<div class="box">
+		<div class="back">
+			<a href="{{url_for('admin_dashboard',curr_login_id=curr_login_id)}}" class="back">Dashboard</a>
+		<div>
+		<h1> Edit Product</h1>
+		<form method="POST">
+			<div>
+				<label for ="name"> Product name:</label>
+				<input type="text" id="name" name="name" value="{{product.name}}" required>
+			</div>	
+			<div>
+				<label for ="price"> Price:</label>
+				<input type="number" id="price" name="price" value="{{product.price}}" required>
+			</div>
+			<div>
+				<label for ="unit"> Unit:</label>
+				<input type="text" id="unit" name="unit" value="{{product.unit}}" required>
+			</div>
+			<div>
+				<label for ="quantity"> Quantity:</label>
+				<input type="number" id="quantity" name="quantity" value="{{product.quantity}}" required>
+			</div>
+			<div>
+				<label for ="mf_date"> Mf Date:</label>
+				<input type="date" id="mf_date" name="mf_date" value="{{product.mf_date}}" required>
+			</div>
+			<div>
+				<label for ="expiry_date"> Expiry Date:</label>
+				<input type="date" id="expiry_date" name="expiry_date" value="{{product.expiry_date}}" required>
+			</div>
+			<div>
+				<label for "cate">Category:</label>
+				<select id="category" name="category_id" required>
+					{%for category in categories%}
+					<option value="{{category.id}}"{%if category.id==product.category_id%}selected{%endif%}
+						>{{category.name}}</option>
+					{%endfor%}
+				</select>
+			<div>
+				<input type="submit" value="Update Product">
+			</div>
+</body>

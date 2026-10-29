@@ -169,7 +169,98 @@ def admin_dashboard(curr_login_id):
     flash("Please login to the access the admin Dashboard")
     return redirect(url_for('logout'))
             
+@app.route('/admin/<int:curr_login_id>/create_product',methods=["GET","POST"])
+def create_product(curr_login_id):
+    if not get_user_admin(curr_login_id):
+        flash("You are not authorised to access this page")
+        return redirect(url_for('logout'))
     
+    if request.method=="POST":
+        name=request.form['name']
+        price=float(request.form['price'])
+        unit=request.form['unit']
+        quantity=int(request.form['quantity'])
+        mf_date=datetime.strptime(
+            request.form['mf_date'],'%Y-%m-%d').date()
+        expiry_date=datetime.strptime(
+            request.form['expiry_date'],'%Y-%m-%d').date()
+        category_id=int(request.form['category_id'])
+        
+        product=Product(
+            name=name,
+            price=price,
+            unit=unit,
+            quantity=quantity,
+            mf_date=mf_date,
+            expiry_date=expiry_date,
+            category_id=category_id
+        )
+        
+        
+        try:
+            db.session.add(product)
+            db.session.commit()
+            return redirect(url_for('admin_dashboard',curr_login_id=curr_login_id))
+       
+        except IntegrityError:
+            db.session.rollback()
+            flash("Product is already existed in the Db")
+            return redirect(url_for('create_product'))
+    
+    
+    categories=Category.query.all()    
+    return render_template("create_product.html",curr_login_id=curr_login_id,categories=categories)
+
+
+@app.route('/admin/<int:curr_login_id>/edit_product/<int:product_id>',methods=["GET","POST"])
+def edit_product(curr_login_id,product_id):
+    if not get_user_admin(curr_login_id):
+        flash("You are not authorised to access this page")
+        return redirect(url_for('logout'))
+    
+    
+    product=Product.query.get_or_404(product_id)
+    
+    if request.method=="POST":
+        product.name=request.form['name']
+        product.price=float(request.form['price'])
+        product.unit=request.form['unit']
+        product.quantity=int(request.form['quantity'])
+        product.mf_date=datetime.strptime(
+                request.form['mf_date'],'%Y-%m-%d').date()
+        product.expiry_date=datetime.strptime(
+                request.form['expiry_date'],'%Y-%m-%d').date()
+        product.category_id=int(request.form['category_id'])
+        
+          
+        try:
+            db.session.commit()
+            return redirect(url_for('admin_dashboard',curr_login_id=curr_login_id))
+       
+        except IntegrityError:
+            db.session.rollback()
+            flash("Category is already existed in the Db")
+            return redirect(url_for('edit_product',curr_login_id=curr_login_id,product_id=product.id))
+    
+    categories=Category.query.all()    
+    return render_template("edit_product.html",curr_login_id=curr_login_id,product=product,categories=categories)
+
+
+@app.route('/admin/<int:curr_login_id>/remove_product/<int:product_id>', methods=['GET', 'POST'])
+def remove_product(curr_login_id, product_id):
+    if not get_user_admin(curr_login_id):
+        flash('You are not authorized to access this page.')
+        return redirect(url_for('logout'))
+
+    product=Product.query.get_or_404(product_id)
+
+    if request.method == 'POST':
+        db.session.delete(product)
+        db.session.commit()
+        return redirect(url_for('admin_dashboard', curr_login_id=curr_login_id))
+
+    return render_template('remove_product.html', curr_login_id=curr_login_id, product=product)
+
 
 
 @app.route('/logout')
@@ -180,5 +271,5 @@ def logout():
         
 
 if __name__=="__main__":
-    app.run(port=5000,debug=True)
+    app.run(port=7000,debug=True)
 

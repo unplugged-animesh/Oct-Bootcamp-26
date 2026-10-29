@@ -22,8 +22,37 @@
 						Edit</a>
 					<a href="{{url_for('remove_category',curr_login_id=data.curr_login_id,category_id=category.id)}}" class="cate">
 						Remove</a>
-					</div>
+					<a href="{{url_for('create_product',curr_login_id=data.curr_login_id,category_id=category.id)}}" class="cate">
+						Add Product</a>
 				</div>
+				<table class="prod-table">
+					<tr>
+						<th>Product</th>
+						<th>Price</th>
+						<th>Unit</th>
+						<th>Quantity</th>
+						<th>Mf Date</th>
+						<th>Expiry Date</th>
+						<th>Actions</th>
+					</tr>
+					{%for product in category.products%}
+					<tr>
+						<td class="prod-name">{{product.name}}</td>
+						<td class="prod-name">{{product.price}}</td>
+						<td class="prod-name">{{product.unit}}</td>
+						<td class="prod-name">{{product.quantity}}</td>
+						<td class="prod-name">{{product.mf_date}}</td>
+						<td class="prod-name">{{product.expiry_date}}</td>
+						<td>
+							<a href="{{url_for('edit_product',curr_login_id=data.curr_login_id,product_id=product.id)}}" class="cate">
+								Edit</a>
+							<a href="{{url_for('remove_product',curr_login_id=data.curr_login_id,product_id=product.id)}}" class="remov-prod">
+								Remove</a>
+						</td>
+					</tr>
+					{%endfor%}	
+				</table>
+			</div>
 			{%endfor%}
 			</div>
 		</div>
