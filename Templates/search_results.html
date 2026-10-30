@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Search Results</title>
+</head>
+<body>
+	<div class="back">
+			<a href="{{url_for('customer_dashboard',curr_login_id=curr_login_id)}}" class="back">Home</a>
+	<div>
+	<h1>Search Results for '{{search_query}}'</h1>
+	{% if products %}
+	<div class="prod">
+		{% for product in products %}
+		<div class="list">
+			<h3 class="list">Name:{{product.name}}</h3>
+			<p class="list">Price:{{product.price}}</p>
+			<p class="list">Unit:{{product.unit}}</p>
+			<p class="list">Quantity:{{product.quantity}}</p>
+			<p class="list">Mf Date:{{product.mf_date}}</p>
+			<p class="list">Expiry Date:{{product.expiry_date}}</p>
+			<form method="POST"
+				action="{{url_for('customer_add_to_cart',curr_login_id=curr_login_id,product_id=product.id)}}">
+				<input type='number' name="quantity" value="1">
+				<button type="submit" class="Add">Add to Cart</button>
+			</form>
+		</div>
+		{%endfor%}
+	</div>
+	{%endif%}
+	{%if categories%}
+	<div class="Category">
+		{% for category in categories%}
+		<div class="cat-name">
+			<h3 class="cat-name">{{category.name}}</h3>
+			{% for product in category.products%}
+			<div class="list">
+				<h3 class="list">Name:{{product.name}}</h3>
+				<p class="list">Price:{{product.price}}</p>
+				<p class="list">Unit:{{product.unit}}</p>
+				<p class="list">Quantity:{{product.quantity}}</p>
+				<p class="list">Mf Date:{{product.mf_date}}</p>
+				<p class="list">Expiry Date:{{product.expiry_date}}</p>
+				<form method="POST"
+					action="{{url_for('customer_add_to_cart',curr_login_id=curr_login_id,product_id=product.id)}}">
+					<input type='number' name="quantity" value="1">
+					<button type="submit" class="Add">Add to Cart</button>
+				</form>
+			</div>
+			{%endfor%}
+		</div>
+		{%endfor%}
+	</div>
+	{%endif%}
+
+	{%if not product and not categories%}
+	<p class="add">No Result found.</p>
+	{%endif%}
+
+
+</body>
+</html>
